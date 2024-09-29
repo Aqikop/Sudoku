@@ -9,6 +9,7 @@ void initGrid(int grid[Size][Size]);
 void printGrid(int grid[Size][Size]);
 void userInput(int grid[Size][Size]);
 bool isSafe(int grid[Size][Size], int row, int col, int num);
+void shuffle(int *array, int n);
 
 int main(){
     int Grid[Size][Size];
@@ -16,6 +17,7 @@ int main(){
     initGrid(Grid);
     printGrid(Grid);
     userInput(Grid);
+    
 
     return 0;
 }
@@ -27,6 +29,7 @@ bool isSafe(int grid[Size][Size], int row, int col, int num){
         }
     }
 
+    // Check number in 3x3 
     int startRow = row - row % 3;
     int startCol = col - col % 3;
     for(int i = 0; i < 3; i++){
@@ -37,6 +40,15 @@ bool isSafe(int grid[Size][Size], int row, int col, int num){
         }
     }
     return true;
+}
+
+void shuffle(int *array, int n){
+    for(int i = n-1; i > 0; i--){
+        int j = rand() % (i+1);
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
 }
 
 void initGrid(int grid[Size][Size]){
