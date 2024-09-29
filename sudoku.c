@@ -8,6 +8,7 @@
 void initGrid(int grid[Size][Size]);
 void printGrid(int grid[Size][Size]);
 void userInput(int grid[Size][Size]);
+bool isSafe(int grid[Size][Size], int row, int col, int num);
 
 int main(){
     int Grid[Size][Size];
@@ -17,6 +18,25 @@ int main(){
     userInput(Grid);
 
     return 0;
+}
+
+bool isSafe(int grid[Size][Size], int row, int col, int num){
+    for(int i=0; i < Size; i++){
+        if(grid[row][i] == num || grid[i][col] == num){
+            return false;
+        }
+    }
+
+    int startRow = row - row % 3;
+    int startCol = col - col % 3;
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if(grid[i + startRow][j +startCol] == num){
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 void initGrid(int grid[Size][Size]){
