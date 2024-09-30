@@ -1,22 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <stdbool.h>
 
 #define Size 9 // Sudoku grid size 9x9
 
 // Function
-void initGrid(int grid[Size][Size]);
+bool initGrid(int grid[Size][Size]);
 void printGrid(int grid[Size][Size]);
 void userInput(int grid[Size][Size]);
 bool isSafe(int grid[Size][Size], int row, int col, int num);
 void shuffle(int *array, int n);
 
 int main(){
-    int Grid[Size][Size];
+    srand(time(NULL));
+    int Grid[Size][Size] = {0};
 
-    initGrid(Grid);
-    printGrid(Grid);
-    userInput(Grid);
+    if(initGrid(Grid)){
+        printGrid(Grid);
+    } else {
+        printf("No solu");
+    }
+    //userInput(Grid);
     
 
     return 0;
@@ -51,12 +56,26 @@ void shuffle(int *array, int n){
     }
 }
 
-void initGrid(int grid[Size][Size]){
-    for(int i = 0 ; i < Size;i++){
+bool initGrid(int grid[Size][Size]){
+    int array_nums[Size] = {1,2,3,4,5,6,7,8,9};
+    for(int i = 0; i < Size; i++){
         for(int j = 0; j < Size; j++){
-            grid[i][j] = 0;
+            if(grid[i][j] == 0){
+                shuffle(array_nums, Size);
+                for(int k = 0; k < Size; k++){
+                    if(isSafe(grid,i,j,array_nums[k])){
+                        grid[i][j] = array_nums[k];
+                        if(initGrid(grid)){
+                            return true;
+                        }
+                        grid[i][j] = 0;
+                    }
+                }
+                return false;
+            }
         }
     }
+    return true;
 }
 
 void printGrid(int grid[Size][Size]){
