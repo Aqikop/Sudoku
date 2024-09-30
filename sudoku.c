@@ -7,6 +7,7 @@
 
 // Function
 bool initGrid(int grid[Size][Size]);
+void removeNums(int grid[Size][Size], int Rn);
 void printGrid(int grid[Size][Size]);
 void userInput(int grid[Size][Size]);
 bool isSafe(int grid[Size][Size], int row, int col, int num);
@@ -17,6 +18,7 @@ int main(){
     int Grid[Size][Size] = {0};
 
     if(initGrid(Grid)){
+        removeNums(Grid,40); //Change the number to increase/decrease difficulty 
         printGrid(Grid);
     } else {
         printf("No solu");
@@ -76,6 +78,18 @@ bool initGrid(int grid[Size][Size]){
         }
     }
     return true;
+}
+
+void removeNums(int grid[Size][Size], int Rn){
+    int count = 0;
+    while(Rn > count){
+        int row = rand() % Size;
+        int col = rand() % Size;
+        if(grid[row][col] != 0){
+            grid[row][col] = 0;
+            count++;
+        }
+    }
 }
 
 void printGrid(int grid[Size][Size]){
