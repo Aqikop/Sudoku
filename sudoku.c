@@ -4,15 +4,15 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define Size 9 // Sudoku grid size 9x9
+#define Size 9 // Sudoku standard grid size 9x9
 
 // Function
 bool initGrid(int grid[Size][Size]);
-void removeNums(int grid[Size][Size], int Rn);
+void removeNums(int grid[Size][Size], int Rn); // Create a playable sudoku's table
 void printGrid(int grid[Size][Size]);
 void userInput(int grid[Size][Size], int copy[Size][Size]);
 bool isSafe(int grid[Size][Size], int row, int col, int num);
-void shuffle(int *array, int n);
+void shuffle(int *array, int n); // Randomize the number in sudoku's table
 
 int main(){
     srand(time(NULL));
@@ -29,9 +29,7 @@ int main(){
     } else {
         printf("No solution.");
     }
-    //userInput(Grid);
     
-
     return 0;
 }
 
@@ -119,6 +117,7 @@ void userInput(int grid[Size][Size], int copy[Size][Size]){
         printf("Enter the row, collumn and number: ");
         scanf("%d %d %d", &row, &collumn, &num);
         if(row >= 0 && row <=8 && collumn >= 0 && collumn <= 8 && num >= 1 && num <= 9){
+            // Check the inputed number is correct or not
             if(isSafe(grid, row, collumn, num)){
                 grid[row][collumn] = num;
                 printGrid(grid);
@@ -126,9 +125,10 @@ void userInput(int grid[Size][Size], int copy[Size][Size]){
                 printf("Cannot place %d at (%d,%d)\n",num,row,collumn);
             }
         } else{
-            printf("Invalid . Try again.\n");
+            printf("Invalid row or collumn or number. Try again.\n");
         }
 
+        // Check if the table if fully filled
         bool filled = false;
         for(int i = 0; i < Size; i++){
             for(int j = 0; j < Size; j++){
@@ -138,7 +138,7 @@ void userInput(int grid[Size][Size], int copy[Size][Size]){
                 }
             }
         }
-
+        // Break out of while loop
         if(filled){
             printf("Complete");
             break;
