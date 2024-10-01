@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define Size 9 // Sudoku grid size 9x9
 
@@ -9,7 +10,7 @@
 bool initGrid(int grid[Size][Size]);
 void removeNums(int grid[Size][Size], int Rn);
 void printGrid(int grid[Size][Size]);
-void userInput(int grid[Size][Size]);
+void userInput(int grid[Size][Size], int copy[Size][Size]);
 bool isSafe(int grid[Size][Size], int row, int col, int num);
 void shuffle(int *array, int n);
 
@@ -18,10 +19,15 @@ int main(){
     int Grid[Size][Size] = {0};
 
     if(initGrid(Grid)){
-        removeNums(Grid,40); //Change the number to increase/decrease difficulty 
+        // Create a dup grid
+        int copy_grid[Size][Size];
+        memcpy(copy_grid, Grid, sizeof(Grid));
+        
+        removeNums(Grid,1); //Change the number to increase/decrease difficulty 
         printGrid(Grid);
+        userInput(Grid, copy_grid);
     } else {
-        printf("No solu");
+        printf("No solution.");
     }
     //userInput(Grid);
     
@@ -82,7 +88,7 @@ bool initGrid(int grid[Size][Size]){
 
 void removeNums(int grid[Size][Size], int Rn){
     int count = 0;
-    while(Rn > count){
+    while(Rn >= count){
         int row = rand() % Size;
         int col = rand() % Size;
         if(grid[row][col] != 0){
@@ -107,10 +113,36 @@ void printGrid(int grid[Size][Size]){
     }
 }
 
-void userInput(int grid[Size][Size]){
+void userInput(int grid[Size][Size], int copy[Size][Size]){
     int row, collumn, num;
-    printf("Enter the row, collumn and number: ");
-    scanf("%d %d %d", &row, &collumn, &num);
-    grid[row][collumn] = num;
-    printGrid(grid);
+    do{
+        printf("Enter the row, collumn and number: ");
+        scanf("%d %d %d", &row, &collumn, &num);
+        if(row >= 0 && row <=8 && collumn >= 0 && collumn <= 8 && num >= 1 && num <= 9){
+            if(isSafe(grid, row, collumn, num)){
+                grid[row][collumn] = num;
+                printGrid(grid);
+            } else{
+                printf("Cannot place %d at (%d,%d)\n",num,row,collumn);
+            }
+        } else{
+            printf("Invalid . Try again.\n");
+        }
+
+        bool filled = false;
+        for(int i = 0; i < Size; i++){
+            for(int j = 0; j < Size; j++){
+                if(grid[i][j] != 0){
+                    filled = true;
+                    break;
+                }
+            }
+        }
+
+        if(filled){
+            printf("Complete");
+            break;
+        }
+        
+    } while (true);
 }
